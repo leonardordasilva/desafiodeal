@@ -22,7 +22,4 @@ public class Departamento {
 
     @Column(length = 50)
     private String departamento_name;
-
-    @OneToMany(mappedBy = "funcionario")
-    private List<FuncionarioDepartamento> funcionarioDepartamentoList = new ArrayList<>();
 }

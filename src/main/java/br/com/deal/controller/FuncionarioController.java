@@ -1,6 +1,8 @@
 package br.com.deal.controller;
 
+import br.com.deal.entity.Departamento;
 import br.com.deal.entity.Funcionario;
+import br.com.deal.repository.DepartamentoRepository;
 import br.com.deal.repository.FuncionarioRepository;
 import br.com.deal.util.Constantes;
 import br.com.deal.util.Validator;
@@ -28,9 +30,12 @@ public class FuncionarioController {
 
     private final FuncionarioRepository funcionarioRepository;
 
-    public FuncionarioController(Validator validator, FuncionarioRepository funcionarioRepository) {
+    private final DepartamentoRepository departamentoRepository;
+
+    public FuncionarioController(Validator validator, FuncionarioRepository funcionarioRepository, DepartamentoRepository departamentoRepository, DepartamentoRepository departamentoRepository1) {
         this.validator = validator;
         this.funcionarioRepository = funcionarioRepository;
+        this.departamentoRepository = departamentoRepository1;
     }
 
     @PostMapping
@@ -123,5 +128,22 @@ public class FuncionarioController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/departamentos/{id}")
+    public ResponseEntity findAllByDepartamento(@PathVariable Integer id) {
+        Optional<Departamento> departamentoOptional = departamentoRepository.findById(id);
+
+        if (!departamentoOptional.isPresent()) {
+            return ResponseEntity.badRequest().body(Constantes.DEPARTAMENTO_INEXISTENTE);
+        }
+
+        List<Funcionario> funcionarioList = funcionarioRepository.findAllByDepartamento(id);
+
+        if (funcionarioList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(funcionarioList);
     }
 }

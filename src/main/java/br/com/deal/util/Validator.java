@@ -67,9 +67,17 @@ public class Validator {
 
         Funcionario funcionarioChefe = funcionarioRepository.findChefeDepartamento(funcionario.getDepartamento().getDepartamentoId());
 
-        if (funcionarioChefe != null
-                && !funcionarioChefe.getFuncionarioId().equals(funcionario.getFuncionarioId())) {
-            result = Boolean.TRUE;
+        if (funcionarioChefe != null) {
+            if (funcionario.getFuncionarioId() == null
+                    && funcionario.getCargo().getCargoId().equals(1)) {
+                result = Boolean.TRUE;
+            }
+
+            if (funcionario.getFuncionarioId() != null
+                    && !funcionario.getFuncionarioId().equals(funcionarioChefe.getFuncionarioId())
+                    && funcionario.getCargo().getCargoId().equals(1)) {
+                result = Boolean.TRUE;
+            }
         }
 
         return result;

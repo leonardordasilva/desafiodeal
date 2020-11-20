@@ -21,12 +21,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
+    private final Validator validator;
 
-    @Autowired
-    private Validator validator;
+    private final FuncionarioRepository funcionarioRepository;
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    public FuncionarioController(Validator validator, FuncionarioRepository funcionarioRepository) {
+        this.validator = validator;
+        this.funcionarioRepository = funcionarioRepository;
+    }
 
     @PostMapping
     @Transactional

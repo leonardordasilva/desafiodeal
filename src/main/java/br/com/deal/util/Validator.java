@@ -13,15 +13,17 @@ import java.util.Optional;
 
 @Component
 public class Validator {
+    private final FuncionarioRepository funcionarioRepository;
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private final CargoRepository cargoRepository;
 
-    @Autowired
-    private CargoRepository cargoRepository;
+    private final DepartamentoRepository departamentoRepository;
 
-    @Autowired
-    private DepartamentoRepository departamentoRepository;
+    public Validator(FuncionarioRepository funcionarioRepository, CargoRepository cargoRepository, DepartamentoRepository departamentoRepository) {
+        this.funcionarioRepository = funcionarioRepository;
+        this.cargoRepository = cargoRepository;
+        this.departamentoRepository = departamentoRepository;
+    }
 
     public boolean exist(Funcionario funcionario) {
         Boolean response = Boolean.FALSE;

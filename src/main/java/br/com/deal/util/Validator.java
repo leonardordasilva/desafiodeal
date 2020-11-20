@@ -6,7 +6,6 @@ import br.com.deal.entity.Funcionario;
 import br.com.deal.repository.CargoRepository;
 import br.com.deal.repository.DepartamentoRepository;
 import br.com.deal.repository.FuncionarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>br.com.deal</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>desafio</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>desafio</name>
     <description>Desafio para desenvolvedor java senior</description>
@@ -39,6 +39,16 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
 
         <dependency>

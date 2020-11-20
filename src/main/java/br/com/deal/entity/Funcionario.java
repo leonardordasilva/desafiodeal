@@ -1,7 +1,11 @@
 package br.com.deal.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,32 +24,42 @@ import java.util.List;
 @Data
 @Entity
 public class Funcionario {
+    @JsonProperty("funcionario_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    private Integer funcionario_id;
+    private Integer funcionarioId;
 
+    @JsonProperty("funcionario_name")
     @Column(length = 50)
-    private String funcionario_name;
+    private String funcionarioName;
 
-    private Integer funcionario_age;
+    @JsonProperty("funcionario_age")
+    private Integer funcionarioAge;
 
-    private LocalDate funcionario_birthday;
+    @JsonProperty("funcionario_birthday")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate funcionarioBirthday;
 
+    @JsonProperty("funcionario_document")
     @Column(length = 50)
-    private String funcionario_document;
+    private String funcionarioDocument;
 
+    @JsonProperty("cargo")
     @OneToOne
-    @JoinColumn(name = "cargo_id")
-    private Cargo cargo_id;
+    @JoinColumn(name = "cargoId")
+    private Cargo cargo;
 
+    @JsonProperty("departamento")
     @OneToOne
-    @JoinColumn(name = "departamento_id")
-    private Departamento departamento_id;
+    @JoinColumn(name = "departamentoId")
+    private Departamento departamento;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "funcionario_departamento",
-            joinColumns = @JoinColumn(name = "funcionario_id"),
-            inverseJoinColumns = @JoinColumn(name = "departamento_id"))
+            joinColumns = @JoinColumn(name = "funcionarioId"),
+            inverseJoinColumns = @JoinColumn(name = "departamentoId"))
     private List<Departamento> departamentos = new ArrayList<>();
 }

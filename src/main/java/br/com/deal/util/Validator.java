@@ -67,7 +67,8 @@ public class Validator {
 
         Funcionario funcionarioChefe = funcionarioRepository.findChefeDepartamento(funcionario.getDepartamento().getDepartamentoId());
 
-        if (funcionarioChefe != null) {
+        if (funcionarioChefe != null
+                && !funcionarioChefe.getFuncionarioId().equals(funcionario.getFuncionarioId())) {
             result = Boolean.TRUE;
         }
 

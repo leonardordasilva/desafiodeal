@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,8 +47,7 @@ public class FuncionarioController {
             return ResponseEntity.badRequest().body(Constantes.DEPARTAMENTO_INEXISTENTE);
         }
 
-        if (funcionario.getCargo().getCargoId().equals(1)
-                && validator.existChefiaDepartamento(funcionario)) {
+        if (validator.existChefiaDepartamento(funcionario)) {
             return ResponseEntity.badRequest().body(Constantes.DEPARTAMENTO_CHEFIADA);
         }
 
@@ -79,5 +79,34 @@ public class FuncionarioController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity update(@PathVariable Integer id, @RequestBody @Valid Funcionario funcionario, UriComponentsBuilder uriBuilder) {
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findById(id);
+
+        if (!funcionarioOptional.isPresent()) {
+            return ResponseEntity.badRequest().body(Constantes.FUNCIONARIO_INEXISTENTE);
+        }
+
+        funcionario.setFuncionarioId(funcionarioOptional.get().getFuncionarioId());
+        funcionario.setDepartamentos(funcionarioOptional.get().getDepartamentos());
+
+        if (!validator.validateCargo(funcionario)) {
+            return ResponseEntity.badRequest().body(Constantes.CARGO_INEXISTENTE);
+        }
+
+        if (!validator.validateDepartamento(funcionario)) {
+            return ResponseEntity.badRequest().body(Constantes.DEPARTAMENTO_INEXISTENTE);
+        }
+
+        if (validator.existChefiaDepartamento(funcionario)) {
+            return ResponseEntity.badRequest().body(Constantes.DEPARTAMENTO_CHEFIADA);
+        }
+
+        funcionario.getDepartamentos().add(funcionario.getDepartamento());
+        funcionarioRepository.save(funcionario);
+
+        return ResponseEntity.ok(funcionario);
     }
 }

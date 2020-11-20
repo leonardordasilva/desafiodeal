@@ -61,4 +61,16 @@ public class Validator {
 
         return response;
     }
+
+    public boolean existChefiaDepartamento(Funcionario funcionario) {
+        Boolean result = Boolean.FALSE;
+
+        Funcionario funcionarioChefe = funcionarioRepository.findChefeDepartamento(funcionario.getDepartamento().getDepartamentoId());
+
+        if (funcionarioChefe != null) {
+            result = Boolean.TRUE;
+        }
+
+        return result;
+    }
 }

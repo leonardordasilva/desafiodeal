@@ -17,6 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,8 @@ public class Funcionario {
     @Getter
     private Integer funcionarioId;
 
+    @NotNull
+    @NotEmpty(message = "Nome é obrigatório")
     @JsonProperty("funcionario_name")
     @Column(length = 50)
     private String funcionarioName;
@@ -42,6 +46,8 @@ public class Funcionario {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate funcionarioBirthday;
 
+    @NotNull
+    @NotEmpty(message = "Documento de identificação é obrigatório")
     @JsonProperty("funcionario_document")
     @Column(length = 50)
     private String funcionarioDocument;

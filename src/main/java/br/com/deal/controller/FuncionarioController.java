@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,7 +33,7 @@ public class FuncionarioController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity create(@RequestBody Funcionario funcionario, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity create(@RequestBody @Valid Funcionario funcionario, UriComponentsBuilder uriBuilder) {
         if (validator.exist(funcionario)) {
             return ResponseEntity.badRequest().body(Constantes.FUNCIONARIO_CADASTRADO);
         }
@@ -44,6 +46,11 @@ public class FuncionarioController {
             return ResponseEntity.badRequest().body(Constantes.DEPARTAMENTO_INEXISTENTE);
         }
 
+        if (funcionario.getCargo().getCargoId().equals(1)
+                && validator.existChefiaDepartamento(funcionario)) {
+            return ResponseEntity.badRequest().body(Constantes.DEPARTAMENTO_CHEFIADA);
+        }
+
         funcionario.getDepartamentos().add(funcionario.getDepartamento());
         funcionarioRepository.save(funcionario);
 
@@ -52,12 +59,23 @@ public class FuncionarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Funcionario> findById(@PathVariable Integer id) {
+    public ResponseEntity findById(@PathVariable Integer id) {
         Optional<Funcionario> funcionarioOptional = funcionarioRepository.findById(id);
 
         if (funcionarioOptional.isPresent()) {
             Funcionario funcionario = funcionarioOptional.get();
             return ResponseEntity.ok(funcionario);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping
+    public ResponseEntity findAll() {
+        List<Funcionario> funcionarioList = funcionarioRepository.findAll();
+
+        if (!funcionarioList.isEmpty()) {
+            return ResponseEntity.ok(funcionarioList);
         }
 
         return ResponseEntity.notFound().build();

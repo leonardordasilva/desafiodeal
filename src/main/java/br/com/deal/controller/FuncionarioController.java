@@ -5,6 +5,7 @@ import br.com.deal.repository.FuncionarioRepository;
 import br.com.deal.util.Constantes;
 import br.com.deal.util.Validator;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -108,5 +109,19 @@ public class FuncionarioController {
         funcionarioRepository.save(funcionario);
 
         return ResponseEntity.ok(funcionario);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Integer id) {
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findById(id);
+
+        if (funcionarioOptional.isPresent()) {
+            funcionarioRepository.deleteById(id);
+
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }
